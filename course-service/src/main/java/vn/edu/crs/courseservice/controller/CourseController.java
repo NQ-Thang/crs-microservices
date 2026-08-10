@@ -1,4 +1,6 @@
 package vn.edu.crs.courseservice.controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import vn.edu.crs.courseservice.dto.CourseDTO;
 import vn.edu.crs.courseservice.service.CourseService;
 import jakarta.validation.Valid;
@@ -17,17 +19,19 @@ public class CourseController {
     public List<CourseDTO> getAll() {
         return courseService.getAll();
     }
+
     @GetMapping("/{id}")
     public CourseDTO getById(@PathVariable Long id) {
         return courseService.getById(id);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CourseDTO create(@Valid @RequestBody CourseDTO dto) {
         return courseService.create(dto);
     }
-    @PutMapping("/{id}")
 
+    @PutMapping("/{id}")
     public CourseDTO update(@PathVariable Long id, @Valid @RequestBody
     CourseDTO dto) {
         return courseService.update(id, dto);
@@ -36,5 +40,12 @@ public class CourseController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         courseService.delete(id);
+    }
+
+    @GetMapping("/search")
+    public Page<CourseDTO> search(
+            @RequestParam(required = false) String keyword,
+            Pageable pageable) {
+        return courseService.search(keyword, pageable);
     }
 }
